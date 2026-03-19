@@ -1,46 +1,58 @@
 import random
 
-while True:
-    #難易度選択
+table = {1:10, 2:25, 3:50, 4:100, 5:1000}
+
+table_name = {1:"Easy", 2:"Normal", 3:"Hard", 4:"Extra", 5:"Lunatic"}
+
+table_explan = {1:"1~10", 2:"1~25", 3:"1~50", 4:"1~100", 5:"1~1000"}
+
+#関数処理(難易度選択)
+def select_difficulty():
     print("難易度を選択してね")
     print("1: Easy")
     print("2: Normal")
     print("3: Hard")
     print("4: Extra")
 
+    print()
+
     while True:
-        difficulty = int(input("数字で選択してね→"))
+        difficulty = int(input("数字を入れてね→"))
         if difficulty in (1, 2, 3, 4, 5):
             break
         else:
-            print("その数字は無効だよ💦もう一回入力してね")
+            print("無効な数字だよ💦もう一回入力してね")
 
-    print()
+    max_num = table[difficulty]
+    difficulty_name = table_name[difficulty]
+    explan = table_explan[difficulty]
 
-    if difficulty == 1:
-        answer = random.randint(1, 10)
-        print("Easy を選択しました")
-        print("1=10までの数を当てよう")
-        
-    elif difficulty == 2:
-        answer = random.randint(1, 25)
-        print("Normal を選択しました")
-        print("1~25までの数を当てよう")
-
-    elif difficulty == 3:
-        answer = random.randint(1, 50)
-        print("Hard を選択しました")
-        print("1~50までの数を当てよう")
-
-    elif difficulty == 4:
-        answer = random.randint(1, 100)
-        print("Extra を選択しました")
-        print("1~100までの数を当てよう")
-
+    answer = random.randint(1, max_num)
+    print(f"{difficulty_name}を選択しました")
+    if difficulty in (1, 2, 3, 4):
+        print(f"{explan}の数字を当てよう！")
     elif difficulty == 5:
-        answer = random.randint(1, 1000)
-        print("Lunatic を選択しました")
-        print("1~1000までの数字だよ。文字通り狂気的だけど頑張ってね")
+        print(f"{explan}の数字を当てよう！文字通り狂気的だけど頑張ってね")
+    return answer
+
+#関数処理(距離ヒント)
+def distance_hint(diff):
+    if diff <= 1:
+        print("ニアピン！！惜しい！")
+
+    elif diff <= 2:
+        print("ちょっと近いね、！")
+        
+    elif diff <= 4:
+        print("ボチボチだね🤔")
+
+    else:
+        print("ちょっと遠いかな💦")
+
+
+while True:
+    #難易度選択
+    answer = select_difficulty()
 
     #ゲーム開始
     count = 15
@@ -75,18 +87,8 @@ while True:
             print("もっと小さいよ")
 
         #ヒント表示(距離)
-        if diff <= 1:
-            print("ニアピン！！惜しい！")
+        distance_hint(diff)
 
-        elif diff <= 2:
-            print("ちょっと近いね、！")
-        
-        elif diff <= 4:
-            print("ボチボチだね🤔")
-
-        else:
-            print("ちょっと遠いかな💦")
-        
     #終了後コメント
     print()
     if diff <= 0:
@@ -103,7 +105,7 @@ while True:
         print()
 
         if retry in ("n", "N"):
-                exit("遊んでくれてありがとう")
+                exit("遊んでくれてありがとう！")
         elif retry in ("y", "Y"):
                 print("もう一度遊ぶんだね！ありがとう😄")
                 print("難易度選択に戻るよ！")
