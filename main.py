@@ -1,19 +1,17 @@
 import random
 
 table = {1:10, 2:25, 3:50, 4:100, 5:1000}
-
 table_name = {1:"Easy", 2:"Normal", 3:"Hard", 4:"Extra", 5:"Lunatic"}
-
 table_explan = {1:"1~10", 2:"1~25", 3:"1~50", 4:"1~100", 5:"1~1000"}
+table_count = {1:15, 2:10, 3:10, 4:10, 5:10}
 
 #関数処理(難易度選択)
 def select_difficulty():
-    print("難易度を選択してね")
+    print("※難易度を1~4(5)で選択してね")
     print("1: Easy")
     print("2: Normal")
     print("3: Hard")
     print("4: Extra")
-
     print()
 
     while True:
@@ -26,40 +24,94 @@ def select_difficulty():
     max_num = table[difficulty]
     difficulty_name = table_name[difficulty]
     explan = table_explan[difficulty]
+    init_count = table_count[difficulty]
+    comp_value = table_comp_value[difficulty]
 
-    answer = random.randint(1, max_num)
+    print()
+
+    answer = random.randint(1, max_num) 
     print(f"{difficulty_name}を選択しました")
     if difficulty in (1, 2, 3, 4):
         print(f"{explan}の数字を当てよう！")
     elif difficulty == 5:
         print(f"{explan}の数字を当てよう！文字通り狂気的だけど頑張ってね")
-    return answer
+    
+    print()
+
+    while True:
+        prep = input("確認できたらyを入力してね→")
+        if prep in ("y", "Y"):
+            break
+        else:
+            print("入力しなおしてね")
+        
+    return answer, init_count, comp_value
+
+#関数処理(ルール説明)
+def rule_explan(count):
+    print("※次にルール説明")
+    print(f"挑戦回数は {count} 回まで。")
+    print("回数を超えたらゲームオーバーになるよ")
+    print()
+    print("初回入力前にヒントがあって以下の範囲を基準値としているよ")
+    print("Easy: 5~7基準")
+    print("Normal: 10~15基準")
+    print("Hard: 20~30基準")
+    print("Extra: 40~60基準")
+    print("Lunatic: 400~600基準")
+    print()
+    
+    while True:
+        prep = input("確認出来たらyを入力してね→")
+        if prep in ("y", "Y"):
+            break
+        else:
+            print("無効な文字だよ、入力しなおしてね")
+
+#入力前ヒント
+def befinput_hint(init_count, count, comp_value, answer):
+    if init_count == count:
+        if comp_value == answer:
+            print("基準値と一致！")
+        elif comp_value < answer:
+            print("基準値より大きいよ！")
+        elif comp_value > answer:
+            print("基準値より小さいよ！")
 
 #関数処理(距離ヒント)
 def distance_hint(diff):
     if diff <= 1:
         print("ニアピン！！惜しい！")
-
     elif diff <= 2:
         print("ちょっと近いね、！")
-        
     elif diff <= 4:
         print("ボチボチだね🤔")
-
     else:
         print("ちょっと遠いかな💦")
 
 
 while True:
+    random_easy = random.randint(5, 7)
+    random_normal = random.randint(10, 15)
+    random_hard = random.randint(20, 30)
+    random_extra = random.randint(40, 60)
+    random_lunatic = random.randint(400, 600)
+
+    table_comp_value = {1:random_easy, 2:random_normal, 3:random_hard, 4:random_extra, 5:random_lunatic}
+
     #難易度選択
-    answer = select_difficulty()
+    answer, init_count, comp_value = select_difficulty()
+    print()
+
+    #ルール説明
+    count = init_count
+    rule_explan(count)
+    print()
+
+    #入力前ヒント
+    befinput_hint(init_count, count, comp_value, answer)
 
     #ゲーム開始
-    count = 15
-    print()
-    print("挑戦回数は15回までだよ")
-    print("回数を超えたらゲームオーバー😭")
-
     while True:
         #ループ開始
         print()
@@ -74,7 +126,6 @@ while True:
         if diff == 0:
             print(f"答えは {answer} だね！正解！")
             break
-
         if count <= 0:
             print("ゲームオーバー😭")
             break
@@ -82,7 +133,6 @@ while True:
         #ヒント表示(方向)
         if guess < answer:
             print("もっと大きいよ")
-
         elif guess > answer:
             print("もっと小さいよ")
 
@@ -91,9 +141,8 @@ while True:
 
     #終了後コメント
     print()
-    if diff <= 0:
+    if diff == 0:
         print("クリアできたね！！おめでとう😃")
-        
     elif count <= 0:
         print("クリアできなかったね。。。ざんねん😭")
 
