@@ -1,9 +1,10 @@
 import random
 
+#辞書(設定)
 table = {1:10, 2:25, 3:50, 4:100, 5:1000}
 table_name = {1:"Easy", 2:"Normal", 3:"Hard", 4:"Extra", 5:"Lunatic"}
 table_explan = {1:"1~10", 2:"1~25", 3:"1~50", 4:"1~100", 5:"1~1000"}
-table_count = {1:15, 2:10, 3:10, 4:10, 5:10}
+table_count = {1:15, 2:10, 3:8, 4:7, 5:10}
 
 #関数処理(難易度選択)
 def select_difficulty():
@@ -21,44 +22,46 @@ def select_difficulty():
         else:
             print("無効な数字だよ💦もう一回入力してね")
 
+    print()
+
     max_num = table[difficulty]
     difficulty_name = table_name[difficulty]
     explan = table_explan[difficulty]
     init_count = table_count[difficulty]
     comp_value = table_comp_value[difficulty]
 
-    print()
-
     answer = random.randint(1, max_num) 
     print(f"{difficulty_name}を選択しました")
     if difficulty in (1, 2, 3, 4):
         print(f"{explan}の数字を当てよう！")
-    elif difficulty == 5:
+    else:
         print(f"{explan}の数字を当てよう！文字通り狂気的だけど頑張ってね")
     
     print()
 
     while True:
-        prep = input("確認できたらyを入力してね→")
+        prep = input("確認できたらyを入力→")
         if prep in ("y", "Y"):
             break
         else:
             print("入力しなおしてね")
         
-    return answer, init_count, comp_value
+    return answer, init_count, comp_value, difficulty
 
 #関数処理(ルール説明)
-def rule_explan(count):
+def rule_explan(count, difficulty):
     print("※次にルール説明")
-    print(f"挑戦回数は {count} 回まで。")
+    print(f"挑戦回数は {count} 回まで")
     print("回数を超えたらゲームオーバーになるよ")
     print()
     print("初回入力前にヒントがあって以下の範囲を基準値としているよ")
-    print("Easy: 5~7基準")
-    print("Normal: 10~15基準")
-    print("Hard: 20~30基準")
-    print("Extra: 40~60基準")
-    print("Lunatic: 400~600基準")
+    if difficulty in (1, 2, 3, 4):
+        print("Easy: 5~7基準")
+        print("Normal: 10~15基準")
+        print("Hard: 20~30基準")
+        print("Extra: 40~60基準")
+    else:
+        print("Lunatic: 400~600基準")
     print()
     
     while True:
@@ -68,7 +71,7 @@ def rule_explan(count):
         else:
             print("無効な文字だよ、入力しなおしてね")
 
-#入力前ヒント
+#関数処理(入力前ヒント)
 def befinput_hint(init_count, count, comp_value, answer):
     if init_count == count:
         if comp_value == answer:
@@ -91,6 +94,7 @@ def distance_hint(diff):
 
 
 while True:
+    #設定
     random_easy = random.randint(5, 7)
     random_normal = random.randint(10, 15)
     random_hard = random.randint(20, 30)
@@ -100,12 +104,12 @@ while True:
     table_comp_value = {1:random_easy, 2:random_normal, 3:random_hard, 4:random_extra, 5:random_lunatic}
 
     #難易度選択
-    answer, init_count, comp_value = select_difficulty()
+    answer, init_count, comp_value, difficulty = select_difficulty()
     print()
 
     #ルール説明
     count = init_count
-    rule_explan(count)
+    rule_explan(count, difficulty)
     print()
 
     #入力前ヒント
